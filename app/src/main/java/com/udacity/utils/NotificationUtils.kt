@@ -25,7 +25,6 @@ fun NotificationManager.sendNotification(messageBody: String, status: String, fi
         .putExtra(DetailActivity.EXTRA_DETAIL_STATUS, status)
         .putExtra(DetailActivity.EXTRA_DETAIL_FILENAME, fileName)
 
-    // Create PendingIntent
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
         NOTIFICATION_ID,
@@ -33,28 +32,22 @@ fun NotificationManager.sendNotification(messageBody: String, status: String, fi
         PendingIntent.FLAG_IMMUTABLE
     )
 
-    // Build the notification, get an instance of NotificationCompat.Builder
     val builder = NotificationCompat.Builder(
         applicationContext,
         applicationContext.getString(R.string.load_notification_channel_id)
     )
-        // Set title, text to builder
         .setContentTitle(applicationContext
             .getString(
                 R.string.notification_title))
         .setContentText(messageBody)
         .setSmallIcon(R.drawable.ic_assistant_black_24dp)
-        // Set content intent
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
-
-        // set the action to open the DetailActivity
         .addAction(
             0,
             applicationContext.getString(R.string.notification_action_details),
             contentPendingIntent
         )
-        // Set priority
         .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     // Call notify

@@ -29,7 +29,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun sendNotification(message: String, status: String, fileName: String) {
 
-        Log.d("sendNotification()", "sent")
         val notificationManager =
             ContextCompat.getSystemService(
                 context,
@@ -40,8 +39,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun download() {
-
-        Log.d("download()", "true")
         var path = ""
 
         when (checkedRadioId.value) {
@@ -64,7 +61,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 Toast.LENGTH_SHORT
             ).show()
         }
-        Log.d("download()", path)
 
         if (path != "") {
             val request =
@@ -83,7 +79,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val downloadManager =
                 context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
             downloadID =
-                downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+                downloadManager.enqueue(request)
         } else {
 
             sendNotification(

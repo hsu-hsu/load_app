@@ -34,8 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView"
-            tools:text="@string/radio_app" />
+            app:layout_constraintTop_toTopOf="@+id/textView"/>
 
         <TextView
             android:id="@+id/textView2"

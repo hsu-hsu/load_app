@@ -39,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
         binding.contentDetail.okButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
     }
