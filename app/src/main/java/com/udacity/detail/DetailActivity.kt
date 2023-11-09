@@ -32,8 +32,8 @@ class DetailActivity : AppCompatActivity() {
 
         notificationManager.cancelAll()
 
-        binding.contentDetail.fileName.text = intent.getStringExtra(EXTRA_DETAIL_FILENAME)
-        binding.contentDetail.status.text = intent.getStringExtra(EXTRA_DETAIL_STATUS)
+        binding.contentDetail.fileName.text = intent.getStringExtra(EXTRA_DETAIL_FILENAME).toString()
+        binding.contentDetail.status.text = intent.getStringExtra(EXTRA_DETAIL_STATUS).toString()
 
 
         binding.contentDetail.okButton.setOnClickListener{

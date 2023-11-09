@@ -22,8 +22,8 @@ private val FLAGS = 0
 fun NotificationManager.sendNotification(messageBody: String, status: String, fileName: String, applicationContext: Context) {
     // Create the content intent for the notification, which launches this activity
     val contentIntent = Intent(applicationContext, DetailActivity::class.java)
-        .putExtra(DetailActivity.EXTRA_DETAIL_STATUS, status)
         .putExtra(DetailActivity.EXTRA_DETAIL_FILENAME, fileName)
+        .putExtra(DetailActivity.EXTRA_DETAIL_STATUS, status)
 
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,

@@ -1,5 +1,6 @@
 package com.udacity.main
 
+import android.Manifest
 import android.app.Application
 import android.app.DownloadManager
 import android.app.NotificationManager
@@ -7,11 +8,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -71,10 +77,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     .setAllowedOverMetered(true)
                     .setAllowedOverRoaming(true)
                     // Required for api 29 and up
-                    .setDestinationInExternalPublicDir(
-                        Environment.DIRECTORY_DOWNLOADS,
-                        "/$context.getString(R.string.app_name)"
-                    )
+//                    .setDestinationInExternalPublicDir(
+//                        Environment.DIRECTORY_DOWNLOADS,
+//                        "/$context.getString(R.string.app_name)"
+//                    )
 
             val downloadManager =
                 context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
@@ -101,14 +107,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Log.d("BroadcastReceiver", "Download Successful")
                     downloadCompleted.value = true
                     sendNotification(
-                        context!!.getString(R.string.notification_description),
-                        context!!.getString(R.string.success),
+                        "The Project 3 repository is downloaded",
+                        "Success",
                         checkedRadioText
                     )
                 } else {
                     sendNotification(
-                        context!!.getString(R.string.notification_description_error),
-                        context!!.getString(R.string.fail),
+                        "The Project 3 repository download fail",
+                        "Fail",
                         checkedRadioText
                     )
                 }

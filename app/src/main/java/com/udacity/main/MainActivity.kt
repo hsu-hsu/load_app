@@ -1,23 +1,21 @@
 package com.udacity.main
 
-import android.app.DownloadManager
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.udacity.customview.ButtonState
 import com.udacity.R
 import com.udacity.databinding.ActivityMainBinding
 
@@ -26,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private lateinit var mainViewModelFactory: MainViewModelFactory
+
+    private var PERMISSION_REQUEST_CODE = 112
 
     private var downloadID: Long = 0
 
@@ -44,18 +44,44 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: Implement code below
         binding.contentmain.customButton.setOnClickListener{
-            binding.contentmain.customButton.buttonState = ButtonState.Loading
+            binding.contentmain.customButton.isEnabled = false
             mainViewModel.download()
         }
 
         mainViewModel.downloadCompleted.observe(this, Observer {
-            binding.contentmain.customButton.buttonState = ButtonState.Completed
+            binding.contentmain.customButton.isEnabled = true
+            Toast.makeText(
+                this,
+                getString(R.string.success),
+                Toast.LENGTH_SHORT
+            ).show()
         })
 
-        createChannel(
-            getString(R.string.load_notification_channel_id),
-            getString(R.string.load_notification_channel_name)
-        )
+        if (Build.VERSION.SDK_INT >= 33) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+            }
+            else{
+                createChannel(
+                    getString(R.string.load_notification_channel_id),
+                    getString(R.string.load_notification_channel_name)
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults.isNotEmpty()){
+            createChannel(
+                getString(R.string.load_notification_channel_id),
+                getString(R.string.load_notification_channel_name)
+            )
+        }
     }
 
     private fun createChannel(channelId: String, channelName: String) {
