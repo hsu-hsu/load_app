@@ -10,9 +10,11 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import com.udacity.R
+import kotlin.properties.Delegates
 
 enum class ButtonState(val label: Int) {
     NORMAL(R.string.button_text_click),
@@ -25,7 +27,7 @@ class LoadingButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     private var widthSize = 0
     private var heightSize = 0
-    private var buttonState = ButtonState.NORMAL
+    private var valueAnimator = ValueAnimator()
 
     // Button Custom attribute
     private var buttonNormal = 0
@@ -42,8 +44,31 @@ class LoadingButton @JvmOverloads constructor(
         typeface = Typeface.create("", Typeface.BOLD)
     }
 
+    var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.NORMAL) { p, old, new ->
+
+        when (new) {
+            ButtonState.COMPLETED-> {
+                Log.d("LoadingButton", " ButtonState.Completed,Default")
+                valueAnimator.cancel()
+                invalidate()
+            }
+
+
+            ButtonState.LOADING -> {
+                Log.d("LoadingButtonnn", "ButtonState.Loading")
+                animation()
+            }
+
+            else -> {
+                invalidate()
+            }
+        }
+
+    }
+
     init {
         isClickable = true
+        buttonState = ButtonState.NORMAL
 
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             buttonNormal = getColor(R.styleable.LoadingButton_button_normal, 0)
@@ -72,27 +97,18 @@ class LoadingButton @JvmOverloads constructor(
         setMeasuredDimension(w, h)
     }
 
-    override fun performClick(): Boolean {
-        super.performClick()
-        buttonState = ButtonState.LOADING
 
-        if (buttonState == ButtonState.LOADING) {
-            animation()
-        }
-
-        invalidate()
-        return true
-    }
 
     private fun animation() {
-        val valueAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
+        valueAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
 
         val updateListener = ValueAnimator.AnimatorUpdateListener { animated ->
             progress = (animated.animatedValue as Float).toDouble()
             invalidate()
         }
 
-        valueAnimator.duration = 3000
+        valueAnimator.duration = 2000
+        valueAnimator.repeatCount = ValueAnimator.INFINITE
         valueAnimator.addUpdateListener(updateListener)
         valueAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {

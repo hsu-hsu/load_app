@@ -16,8 +16,6 @@ import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -76,11 +74,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     .setRequiresCharging(false)
                     .setAllowedOverMetered(true)
                     .setAllowedOverRoaming(true)
-                    // Required for api 29 and up
-//                    .setDestinationInExternalPublicDir(
-//                        Environment.DIRECTORY_DOWNLOADS,
-//                        "/$context.getString(R.string.app_name)"
-//                    )
 
             val downloadManager =
                 context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager

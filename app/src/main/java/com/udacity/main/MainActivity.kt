@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.R
+import com.udacity.customview.ButtonState
 import com.udacity.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -45,11 +46,13 @@ class MainActivity : AppCompatActivity() {
         // TODO: Implement code below
         binding.contentmain.customButton.setOnClickListener{
             binding.contentmain.customButton.isEnabled = false
+            binding.contentmain.customButton.buttonState = ButtonState.LOADING
             mainViewModel.download()
         }
 
         mainViewModel.downloadCompleted.observe(this, Observer {
             binding.contentmain.customButton.isEnabled = true
+            binding.contentmain.customButton.buttonState = ButtonState.COMPLETED
             Toast.makeText(
                 this,
                 getString(R.string.success),
@@ -67,6 +70,11 @@ class MainActivity : AppCompatActivity() {
                     getString(R.string.load_notification_channel_name)
                 )
             }
+        } else {
+            createChannel(
+                getString(R.string.load_notification_channel_id),
+                getString(R.string.load_notification_channel_name)
+            )
         }
     }
 
@@ -91,7 +99,6 @@ class MainActivity : AppCompatActivity() {
             val notificationChannel = NotificationChannel(
                 channelId,
                 channelName,
-                // Change importance
                 NotificationManager.IMPORTANCE_HIGH
             )// Disable badges for this channel
                 .apply {

@@ -35,4 +35,7 @@
     <string name="success">Successful</string>
     <string name="fail">Fail</string>
     <string name="notification_action_details">Check the status</string>
+
+    <string name="download_start">Download Starting</string>
+    <string name="downloading">Downloading...</string>
 </resources>
